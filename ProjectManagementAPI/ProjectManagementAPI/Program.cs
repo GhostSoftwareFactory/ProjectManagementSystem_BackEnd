@@ -1,4 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using ProjectManagementAPI.Config;
+using ProjectManagementAPI.Infra;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,9 @@ builder.Services.AddSwaggerGen();
 
 //Initializing Dependency Injection
 builder.Services.ApplicationServices();
+
+// Initialize EF
+builder.Services.EfInitializer();
 
 var app = builder.Build();
 

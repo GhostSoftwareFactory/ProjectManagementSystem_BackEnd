@@ -9,7 +9,7 @@ namespace ProjectManagementAPI.Controllers
     {
         private readonly IBoardService _boardService = boardService;
 
-        [HttpGet(Name = "GetBoard")]
+        [HttpGet("/board")]
         public async Task<IActionResult> GetBoardById([FromQuery] Guid id)
         {
             var response = await _boardService.GetBoardServiceById(id);
