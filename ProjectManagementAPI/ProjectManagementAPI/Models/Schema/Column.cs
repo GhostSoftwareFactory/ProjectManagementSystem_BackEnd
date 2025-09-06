@@ -5,5 +5,7 @@
         public Guid ColumnID { get; set; }
         public Guid BoardID { get; set; }
         public DateTime CreateDate { get; set; }
+        public string? ColumnName { get; set; }
+        public DateTime UpdateDate { get; set; }
     }
 }

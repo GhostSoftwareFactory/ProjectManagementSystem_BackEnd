@@ -37,16 +37,16 @@ namespace ProjectManagementAPI.Services
         {
             try
             {
-                var cards = await _dbContext.Boards
+                var board = await _dbContext.Boards
                .OrderBy(c => c.Id)
                .Skip((pageNumber - 1) * pageSize)
                .Take(pageSize)
                .ToListAsync();
 
-                if (cards.Count <= 0)
+                if (board.Count <= 0)
                     return (null, false, "not found any board");
 
-                return (cards, true, $"success to get page {pageNumber} with {pageSize}");
+                return (board, true, $"success to get page {pageNumber} with {pageSize}");
             }
             catch (Exception ex)
             {

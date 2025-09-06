@@ -44,7 +44,7 @@ namespace ProjectManagementAPI.Controllers
             try
             {
                 var response = await _boardService.CreateBoard(request);
-                return CustomResponse(response.Item1, response.Item2, response.Item3);
+                return PostCustomResponse(response.Item1, response.Item2, response.Item3);
             }
             catch (Exception ex)
             {

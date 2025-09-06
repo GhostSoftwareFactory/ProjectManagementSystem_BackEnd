@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProjectManagementAPI.Infra;
@@ -11,9 +12,11 @@ using ProjectManagementAPI.Infra;
 namespace ProjectManagementAPI.Migrations
 {
     [DbContext(typeof(DbSetConfig))]
-    partial class DbSetConfigModelSnapshot : ModelSnapshot
+    [Migration("20250906133440_AddColumnName")]
+    partial class AddColumnName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,9 +84,6 @@ namespace ProjectManagementAPI.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("UpdateDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("ColumnID");
