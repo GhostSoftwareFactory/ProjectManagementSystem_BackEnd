@@ -59,5 +59,13 @@ namespace ProjectManagementAPI.Controllers
                 message = returnMessage
             });
         }
+
+        protected IActionResult InternalError(
+            object? responseObject = null,
+            bool isSuccess = false,
+            string returnMessage = "")
+        {
+            return InternalError(responseObject, isSuccess, returnMessage);
+        }
     }
 }

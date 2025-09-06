@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProjectManagementAPI.Infra;
@@ -11,9 +12,11 @@ using ProjectManagementAPI.Infra;
 namespace ProjectManagementAPI.Migrations
 {
     [DbContext(typeof(DbSetConfig))]
-    partial class DbSetConfigModelSnapshot : ModelSnapshot
+    [Migration("20250906152244_UpdatingCardTable")]
+    partial class UpdatingCardTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
