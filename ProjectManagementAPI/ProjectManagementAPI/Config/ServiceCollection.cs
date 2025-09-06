@@ -10,6 +10,8 @@ namespace ProjectManagementAPI.Config
         public static void ApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IBoardService, BoardService>();
+            services.AddScoped<ICardService, CardService>();
+            services.AddScoped<IColumnService, ColumnService>();
         }
     }
 }
