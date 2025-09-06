@@ -1,7 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using ProjectManagementAPI.Config;
-using ProjectManagementAPI.Infra;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 

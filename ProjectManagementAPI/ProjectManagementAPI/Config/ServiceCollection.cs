@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using ProjectManagementAPI.Services;
+﻿using ProjectManagementAPI.Services;
 using ProjectManagementAPI.Services.Interfaces;
-using System.Runtime.CompilerServices;
 
 namespace ProjectManagementAPI.Config
 {
