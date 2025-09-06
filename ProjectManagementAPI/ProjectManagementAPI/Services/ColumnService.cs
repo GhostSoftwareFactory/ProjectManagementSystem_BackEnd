@@ -32,7 +32,7 @@ namespace ProjectManagementAPI.Services
             }
         }
 
-        public async Task<(object?, bool, string)> GetCardByBoardId(Guid boardId)
+        public async Task<(object?, bool, string)> GetColumnByBoardId(Guid boardId)
         {
             try
             {
@@ -69,6 +69,7 @@ namespace ProjectManagementAPI.Services
 
                 var returnObject = new CreateColumnResponse()
                 {
+                    ColumnId = newColumn.ColumnID,
                     ColumnName = request.ColumnName,
                 };
 
@@ -80,11 +81,11 @@ namespace ProjectManagementAPI.Services
             }
         }
 
-        public async Task<(object?, bool, string)> UpdateColumn(Guid Id, UpdateColumnRequest updateRequest)
+        public async Task<(object?, bool, string)> UpdateColumn(UpdateColumnRequest updateRequest)
         {
             try
             {
-                var column = await _dbContext.Columns.FindAsync(Id);
+                var column = await _dbContext.Columns.FindAsync(updateRequest.ColumnId);
 
                 if (column == null)
                     return (null, false, "not found this column");

@@ -39,7 +39,7 @@ namespace ProjectManagementAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostNewBoard([FromBody] BoardRequest request)
+        public async Task<IActionResult> PostNewBoard([FromBody] CreateBoardRequest request)
         {
             try
             {
@@ -53,11 +53,11 @@ namespace ProjectManagementAPI.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> PatchBoard([FromQuery] Guid id, [FromBody] BoardRequest request)
+        public async Task<IActionResult> PatchBoard([FromQuery] Guid id, [FromBody] UpdateBoardRequest request)
         {
             try
             {
-                var response = await _boardService.UpdateBoard(id, request);
+                var response = await _boardService.UpdateBoard(request);
                 return CustomResponse(response.Item1, response.Item2, response.Item3);
             }
             catch (Exception ex)

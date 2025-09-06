@@ -31,7 +31,7 @@ namespace ProjectManagementAPI.Controllers
         {
             try
             {
-                var responseColumn = await _columnService.GetCardByBoardId(BoardId);
+                var responseColumn = await _columnService.GetColumnByBoardId(BoardId);
                 return CustomResponse(responseColumn.Item1, responseColumn.Item2, responseColumn.Item3);
             }
             catch (Exception ex)
@@ -55,11 +55,11 @@ namespace ProjectManagementAPI.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> PatchColumn([FromQuery] Guid Id, [FromBody] UpdateColumnRequest request)
+        public async Task<IActionResult> PatchColumn([FromBody] UpdateColumnRequest request)
         {
             try
             {
-                var response = await _columnService.UpdateColumn(Id, request);
+                var response = await _columnService.UpdateColumn(request);
                 return CustomResponse(response.Item1, response.Item2, response.Item3);
             }
             catch (Exception ex)

@@ -1,6 +1,6 @@
 ﻿namespace ProjectManagementAPI.Models.Response.Board
 {
-    public class BoardResponse
+    public class CreateBoardResponse
     {
         public Guid Id { get; set; }
         public string? BoardName { get; set; }

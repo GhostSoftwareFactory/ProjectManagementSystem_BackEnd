@@ -54,7 +54,7 @@ namespace ProjectManagementAPI.Services
             }
         }
 
-        public async Task<(object?, bool, string)> CreateBoard(BoardRequest newBoard)
+        public async Task<(object?, bool, string)> CreateBoard(CreateBoardRequest newBoard)
         {
             if (newBoard.BoardName is null || newBoard.BoardName == string.Empty)
                 return (null, false, "boardname is required");
@@ -78,7 +78,7 @@ namespace ProjectManagementAPI.Services
                 return (null, false, $"failed to create this board. Error: {ex.Message}");
             }
               
-            var boardResponse = new BoardResponse()
+            var boardResponse = new CreateBoardResponse()
             {
                 Id = boardEntity.Id,
                 BoardName = boardEntity.BoardName,
@@ -89,26 +89,35 @@ namespace ProjectManagementAPI.Services
             return (boardResponse, true, "success to create this board");
         }
 
-        public async Task<(object?, bool, string)> UpdateBoard(Guid Id, BoardRequest newBoard)
+        public async Task<(object?, bool, string)> UpdateBoard(UpdateBoardRequest request)
         {
             try
             {
-                var board = await _dbContext.Boards.FindAsync(Id);
+                var board = await _dbContext.Boards.FindAsync(request.BoardId);
 
                 if (board == null)
                     return (null, false, "not found this board");
 
                 board.UpdateDate = DateTime.UtcNow;
 
-                if (newBoard.BoardName != null)
-                    board.BoardName = newBoard.BoardName;
+                if (request.BoardName != null)
+                    board.BoardName = request.BoardName;
 
-                if (newBoard.Description != null)
-                    board.Description = newBoard.Description;
+                if (request.Description != null)
+                    board.Description = request.Description;
 
                 _dbContext.Boards.Update(board);
                 await _dbContext.SaveChangesAsync();
-                return (board, true, "success to udpate this board");
+
+
+                var responseObject = new UpdateBoardResponse()
+                {
+                    Id = board.Id,
+                    BoardName = board.BoardName,
+                    Description = board.Description,
+                };
+
+                return (responseObject, true, "success to udpate this board");
             }
             catch (Exception ex)
             {
