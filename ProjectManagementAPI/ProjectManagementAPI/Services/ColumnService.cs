@@ -61,6 +61,7 @@ namespace ProjectManagementAPI.Services
                     BoardID = request.BoardId,
                     CreateDate = DateTime.UtcNow,
                     ColumnName = request.ColumnName,
+                    UpdateDate = null,
                 };
 
                 var response = await _dbContext.Columns.AddAsync(newColumn);

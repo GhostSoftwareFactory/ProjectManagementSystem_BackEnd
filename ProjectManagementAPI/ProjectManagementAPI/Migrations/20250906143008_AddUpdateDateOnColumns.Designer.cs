@@ -12,7 +12,7 @@ using ProjectManagementAPI.Infra;
 namespace ProjectManagementAPI.Migrations
 {
     [DbContext(typeof(DbSetConfig))]
-    [Migration("20250906135635_AddUpdateDateOnColumns")]
+    [Migration("20250906143008_AddUpdateDateOnColumns")]
     partial class AddUpdateDateOnColumns
     {
         /// <inheritdoc />
@@ -86,7 +86,7 @@ namespace ProjectManagementAPI.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("UpdateDate")
+                    b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("ColumnID");
