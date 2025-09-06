@@ -1,24 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjectManagementAPI.Infra;
-using ProjectManagementAPI.Models.DTO;
 using ProjectManagementAPI.Models.Requests.Board;
 using ProjectManagementAPI.Models.Response.Board;
 using ProjectManagementAPI.Models.Schema;
 using ProjectManagementAPI.Services.Interfaces;
+using ProjectManagementAPI.Services.Validations;
 
 namespace ProjectManagementAPI.Services
 {
-    public class BoardService(DbSetConfig dbContext) : IBoardService
+    public class BoardService(
+        DbSetConfig dbContext,
+        IValidations<BoardValidations> validations
+        ) : IBoardService
     {
         private readonly DbSetConfig _dbContext = dbContext;
+        private readonly IValidations<BoardValidations> _boardValidations = validations;
         public async Task<(object?, bool, string)> GetBoardServiceById(Guid Id)
         {
             try
             {
-                Guid guidResult;
-                if (!Guid.TryParse(Id.ToString(), out guidResult))
-                    return (null, false, "invalid guid");
-
+                var validation = _boardValidations.ValiateGuidParam(Id);
+                if (!validation.Item1)
+                    return (null, validation.Item1, validation.Item2);
 
                 var card = await _dbContext.Boards.Where(x => x.Id == Id).FirstOrDefaultAsync();
 
@@ -56,8 +59,9 @@ namespace ProjectManagementAPI.Services
 
         public async Task<(object?, bool, string)> CreateBoard(CreateBoardRequest newBoard)
         {
-            if (newBoard.BoardName is null || newBoard.BoardName == string.Empty)
-                return (null, false, "boardname is required");
+            var validationReturn = _boardValidations.ValidateRequest(newBoard);
+            if (!validationReturn.Item1)
+                return (null, validationReturn.Item1, validationReturn.Item2);
 
             var boardEntity = new Board()
             {
@@ -93,6 +97,10 @@ namespace ProjectManagementAPI.Services
         {
             try
             {
+                var validationReturn = _boardValidations.ValidateRequest(request);
+                if (!validationReturn.Item1)
+                    return (null, validationReturn.Item1, validationReturn.Item2);
+
                 var board = await _dbContext.Boards.FindAsync(request.BoardId);
 
                 if (board == null)
@@ -129,6 +137,10 @@ namespace ProjectManagementAPI.Services
         {
             try
             {
+                var validation = _boardValidations.ValiateGuidParam(Id);
+                if (!validation.Item1)
+                    return (null, validation.Item1, validation.Item2);
+
                 var board = await _dbContext.Boards.FindAsync(Id);
 
                 if (board == null)
