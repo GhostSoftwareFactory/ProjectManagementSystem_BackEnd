@@ -44,6 +44,46 @@ namespace ProjectManagementAPI.Migrations
 
                     b.ToTable("Boards");
                 });
+
+            modelBuilder.Entity("ProjectManagementAPI.Models.Schema.Card", b =>
+                {
+                    b.Property<Guid>("CardID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CardContent")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CardTitle")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ColumnID")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("CardID");
+
+                    b.ToTable("Cards");
+                });
+
+            modelBuilder.Entity("ProjectManagementAPI.Models.Schema.Column", b =>
+                {
+                    b.Property<Guid>("ColumnID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BoardID")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("ColumnID");
+
+                    b.ToTable("Columns");
+                });
 #pragma warning restore 612, 618
         }
     }
