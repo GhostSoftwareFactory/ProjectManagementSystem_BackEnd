@@ -1,24 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjectManagementAPI.Infra;
 using ProjectManagementAPI.Models.Requests.Card;
-using ProjectManagementAPI.Models.Requests.Column;
 using ProjectManagementAPI.Models.Response.Card;
-using ProjectManagementAPI.Models.Response.Column;
 using ProjectManagementAPI.Models.Schema;
 using ProjectManagementAPI.Services.Interfaces;
+using ProjectManagementAPI.Services.Validations;
 
 namespace ProjectManagementAPI.Services
 {
-    public class CardService(DbSetConfig dbContext) : ICardService
+    public class CardService(
+        DbSetConfig dbContext,
+        IValidations<CardValidations> validations
+        ) : ICardService
     {
         private readonly DbSetConfig _dbContext = dbContext;
+        private readonly IValidations<CardValidations> _cardValidations = validations;
         public async Task<(object?, bool, string)> GetCardById(Guid Id)
         {
             try
             {
-                Guid guidResult;
-                if (!Guid.TryParse(Id.ToString(), out guidResult))
-                    return (null, false, "invalid guid");
+                var validation = _cardValidations.ValiateGuidParam(Id);
+                if (!validation.Item1)
+                    return (null, validation.Item1, validation.Item2);
 
 
                 var card = await _dbContext.Cards.Where(x => x.CardID == Id).FirstOrDefaultAsync();
@@ -38,6 +41,10 @@ namespace ProjectManagementAPI.Services
         {
             try
             {
+                var validation = _cardValidations.ValiateGuidParam(columnId);
+                if (!validation.Item1)
+                    return (null, validation.Item1, validation.Item2);
+
                 var columns = await _dbContext.Cards
                     .Where(x => x.ColumnID == columnId)
                     .ToListAsync();
@@ -57,6 +64,10 @@ namespace ProjectManagementAPI.Services
         {
             try
             {
+                var validation = _cardValidations.ValidateRequest(request);
+                if (!validation.Item1)
+                    return (null, validation.Item1, validation.Item2);
+
                 var newCard = new Card()
                 {
                     CardID = Guid.NewGuid(),
@@ -87,6 +98,10 @@ namespace ProjectManagementAPI.Services
         {
             try
             {
+                var validation = _cardValidations.ValidateRequest(updateRequest);
+                if (!validation.Item1)
+                    return (null, validation.Item1, validation.Item2);
+
                 var card = await _dbContext.Cards.FindAsync(updateRequest.CardId);
 
                 if (card == null)
@@ -126,6 +141,10 @@ namespace ProjectManagementAPI.Services
         {
             try
             {
+                var validation = _cardValidations.ValiateGuidParam(id);
+                if (!validation.Item1)
+                    return (null, validation.Item1, validation.Item2);
+
                 var card = await _dbContext.Cards.FindAsync(id);
 
                 if (card == null)

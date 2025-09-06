@@ -1,6 +1,8 @@
-﻿namespace ProjectManagementAPI.Models.Requests.Card
+﻿using ProjectManagementAPI.Services.Interfaces;
+
+namespace ProjectManagementAPI.Models.Requests.Card
 {
-    public class UpdateCardRequest
+    public class UpdateCardRequest : IRequest
     {
         public Guid CardId { get; set; }
         public Guid? ColumnID { get; set; }

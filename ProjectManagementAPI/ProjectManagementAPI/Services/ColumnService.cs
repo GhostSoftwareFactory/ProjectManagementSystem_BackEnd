@@ -4,19 +4,24 @@ using ProjectManagementAPI.Models.Requests.Column;
 using ProjectManagementAPI.Models.Response.Column;
 using ProjectManagementAPI.Models.Schema;
 using ProjectManagementAPI.Services.Interfaces;
+using ProjectManagementAPI.Services.Validations;
 
 namespace ProjectManagementAPI.Services
 {
-    public class ColumnService(DbSetConfig dbContext) : IColumnService
+    public class ColumnService(
+        DbSetConfig dbContext,
+        IValidations<ColumnValidations> validations
+        ) : IColumnService
     {
         private readonly DbSetConfig _dbContext = dbContext;
+        private readonly IValidations<ColumnValidations> _columnValidations = validations;
         public async Task<(object?, bool, string)> GetColumnById(Guid Id)
         {
             try
             {
-                Guid guidResult;
-                if (!Guid.TryParse(Id.ToString(), out guidResult))
-                    return (null, false, "invalid guid");
+                var validation = _columnValidations.ValiateGuidParam(Id);
+                if (!validation.Item1)
+                    return (null, validation.Item1, validation.Item2);
 
 
                 var card = await _dbContext.Columns.Where(x => x.ColumnID == Id).FirstOrDefaultAsync();
@@ -36,6 +41,10 @@ namespace ProjectManagementAPI.Services
         {
             try
             {
+                var validation = _columnValidations.ValiateGuidParam(boardId);
+                if (!validation.Item1)
+                    return (null, validation.Item1, validation.Item2);
+
                 var columns = await _dbContext.Columns
                     .Where(x => x.BoardID == boardId)
                     .ToListAsync();
@@ -55,6 +64,10 @@ namespace ProjectManagementAPI.Services
         {
             try
             {
+                var validationReturn = _columnValidations.ValidateRequest(request);
+                if (!validationReturn.Item1)
+                    return (null, validationReturn.Item1, validationReturn.Item2);
+
                 var newColumn = new Column()
                 {
                     ColumnID = Guid.NewGuid(),
@@ -85,6 +98,10 @@ namespace ProjectManagementAPI.Services
         {
             try
             {
+                var validationReturn = _columnValidations.ValidateRequest(updateRequest);
+                if (!validationReturn.Item1)
+                    return (null, validationReturn.Item1, validationReturn.Item2);
+
                 var column = await _dbContext.Columns.FindAsync(updateRequest.ColumnId);
 
                 if (column == null)
@@ -116,6 +133,10 @@ namespace ProjectManagementAPI.Services
         {
             try
             {
+                var validation = _columnValidations.ValiateGuidParam(id);
+                if (!validation.Item1)
+                    return (null, validation.Item1, validation.Item2);
+
                 var column = await _dbContext.Columns.FindAsync(id);
 
                 if (column == null)
