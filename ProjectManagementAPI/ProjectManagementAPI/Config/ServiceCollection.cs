@@ -1,4 +1,5 @@
-﻿using ProjectManagementAPI.Services;
+﻿using ProjectManagementAPI.Infra;
+using ProjectManagementAPI.Services;
 using ProjectManagementAPI.Services.Interfaces;
 using ProjectManagementAPI.Services.Validations;
 
@@ -8,6 +9,7 @@ namespace ProjectManagementAPI.Config
     {
         public static void ApplicationServices(this IServiceCollection services)
         {
+            services.AddSingleton<RedisService>();
             services.AddScoped<IBoardService, BoardService>();
             services.AddScoped<ICardService, CardService>();
             services.AddScoped<IColumnService, ColumnService>();
